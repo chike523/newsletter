@@ -18,7 +18,6 @@ import {
   MenuList,
   MenuItem,
   IconButton,
-  HStack,
   Input,
   InputGroup,
   InputLeftElement,

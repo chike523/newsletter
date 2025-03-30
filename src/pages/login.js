@@ -66,7 +66,7 @@ export default function Login() {
               </Stack>
               <Stack pt={6}>
                 <Text align={'center'}>
-                  Don't have an account?{' '}
+                Don&apos;t have an account?{' '}
                   <NextLink href="/signup" passHref>
                     <Link color={'blue.400'}>Sign up</Link>
                   </NextLink>

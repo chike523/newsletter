@@ -6,9 +6,7 @@ import {
   Heading,
   Text,
   ListItem,
-  OrderedList,
   UnorderedList,
-  Link,
   Divider,
 } from '@chakra-ui/react';
 import Layout from '../components/layout/Layout';
@@ -26,10 +24,10 @@ export default function Privacy() {
         
         <Box mb={8}>
           <Text mb={4}>
-            Newsletter Hub ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how your personal information is collected, used, and disclosed by Newsletter Hub.
+            Newsletter Hub (&quot;we&quot;, &quot;our&quot;, or &quot;us&quot;) is committed to protecting your privacy. This Privacy Policy explains how your personal information is collected, used, and disclosed by Newsletter Hub.
           </Text>
           <Text mb={4}>
-            This Privacy Policy applies to our website, and its associated subdomains (collectively, our "Service"). By accessing or using our Service, you signify that you have read, understood, and agree to our collection, storage, use, and disclosure of your personal information as described in this Privacy Policy.
+            This Privacy Policy applies to our website, and its associated subdomains (collectively, our &quot;Service&quot;). By accessing or using our Service, you signify that you have read, understood, and agree to our collection, storage, use, and disclosure of your personal information as described in this Privacy Policy.
           </Text>
         </Box>
         

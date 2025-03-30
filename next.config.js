@@ -1,8 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
-    // This setting helps with hydration issues in development
-    swcMinify: false,
+    // swcMinify setting has been removed as it's no longer recognized
   };
   
   module.exports = nextConfig;

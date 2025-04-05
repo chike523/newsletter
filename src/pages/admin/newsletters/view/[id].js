@@ -1,6 +1,3 @@
-// src/pages/admin/newsletters/view/[id].js
-// Modified to use getNewsletterById and add send functionality
-
 import React, { useState, useEffect } from 'react';
 import {
   Box,
@@ -30,8 +27,8 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { FiArrowLeft, FiEdit, FiTrash2, FiSend } from 'react-icons/fi';
-import Layout from '../../../../components/layout/Layout';
-import { getNewsletterById, deleteNewsletter, sendNewsletter } from '../../../../lib/firebase';
+import Layout from '@/components/layout/Layout';
+import { getNewsletterById, deleteNewsletter, sendNewsletter } from '@/lib/firebase';
 
 export default function ViewNewsletter() {
   const [isClient, setIsClient] = useState(false);

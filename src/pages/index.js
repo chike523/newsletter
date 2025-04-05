@@ -11,8 +11,8 @@ import {
   Text,
   Stack,
   useToast,
+  Link,
 } from '@chakra-ui/react';
-import Layout from '../components/layout/Layout';
 import { addSubscriber } from '../lib/firebase';
 
 export default function Home() {
@@ -90,142 +90,123 @@ export default function Home() {
   };
 
   return (
-    <Layout>
-      <Container maxW="container.xl" py={10}>
-        <Stack spacing={12}>
-          {/* Hero Section */}
-          <Flex 
-            direction="column" 
-            align="center" 
-            textAlign="center"
-            py={10}
+    <Box bg="black" minH="100vh" display="flex" alignItems="center" justifyContent="center">
+      <Container maxW="container.md" py={10}>
+        <Flex direction="column" align="center">
+          {/* Logo/Avatar Circle */}
+          <Box 
+            width={{base: "120px", md: "180px"}} 
+            height={{base: "120px", md: "180px"}} 
+            borderRadius="full" 
+            position="relative"
+            mb={6}
+            mx="auto"
+            overflow="hidden"
+            boxShadow="0 0 20px rgba(255, 0, 255, 0.5)"
           >
-            <Heading as="h1" size="3xl" mb={4}>
-              Stay Informed with Our Newsletter
-            </Heading>
-            <Text fontSize="xl" color="gray.600" maxW="2xl" mb={10}>
-              Get the latest news, insights, and trends directly to your inbox. Our newsletter covers everything from technology to business strategies.
-            </Text>
-            
-            <Flex 
-              direction={{ base: "column", md: "row" }}
-              w={{ base: "full", md: "container.md" }}
-              gap={4}
-            >
-              <FormControl isInvalid={!!error} flex={1}>
-                <Input
-                  placeholder="Enter your email"
-                  size="lg"
-                  value={email}
-                  onChange={handleEmailChange}
-                />
-                <FormErrorMessage>{error}</FormErrorMessage>
-              </FormControl>
-              <Button
-                colorScheme="blue"
+            <Box
+              as="img"
+              position="absolute"
+              top="0"
+              left="0"
+              width="100%"
+              height="100%"
+              objectFit="cover"
+              src="/images/michael.png" 
+              alt="Michael J. Saylor"
+            />
+          </Box>
+
+          {/* Newsletter Title */}
+          <Heading 
+            as="h1" 
+            fontSize={{base: "3xl", md: "5xl"}}
+            fontWeight="900"
+            letterSpacing="tight"
+            mb={3}
+            color="white"
+            textAlign="center"
+          >
+            The Bitcoin Standard
+          </Heading>
+          
+          {/* Newsletter Description */}
+          <Text 
+            fontSize={{base: "sm", md: "md"}} 
+            color="gray.400"
+            maxW="container.sm"
+            textAlign="center"
+            mx="auto"
+            lineHeight="tall"
+            px={4}
+            mb={3}
+          >
+            Insights on Bitcoin as digital property, monetary inflation, macroeconomics, and the future of money from the Executive Chairman of MicroStrategy and advocate of the Bitcoin Standard.
+          </Text>
+
+          {/* Author Line */}
+          <Text color="gray.500" fontSize="sm" mb={8}>
+            By Michael J. Saylor · Over 250,000 subscribers
+          </Text>
+          
+          {/* Subscription Form */}
+          <Flex 
+            direction={{ base: "column", sm: "row" }}
+            w="100%"
+            maxW="600px"
+            mb={3}
+          >
+            <FormControl isInvalid={!!error} flex={1}>
+              <Input
+                placeholder="Type your email..."
                 size="lg"
-                onClick={handleSubscribe}
-                isLoading={isSubmitting}
-                loadingText="Subscribing"
-                px={8}
-              >
-                Subscribe
-              </Button>
-            </Flex>
+                value={email}
+                onChange={handleEmailChange}
+                bg="gray.900"
+                color="white"
+                border="1px solid"
+                borderColor="gray.700"
+                borderRadius="md"
+                _placeholder={{ color: 'gray.500' }}
+                _focus={{ borderColor: 'red.500' }}
+              />
+              <FormErrorMessage color="red.400">{error}</FormErrorMessage>
+            </FormControl>
+            <Button
+              size="lg"
+              onClick={handleSubscribe}
+              isLoading={isSubmitting}
+              loadingText="Subscribing"
+              bg="red.600"
+              _hover={{ bg: "red.700" }}
+              color="white"
+              borderRadius="md"
+              px={8}
+              ml={{ base: 0, sm: 2 }}
+              mt={{ base: 2, sm: 0 }}
+            >
+              Subscribe
+            </Button>
           </Flex>
 
-          {/* Benefits Section */}
-          <Box py={12}>
-            <Heading as="h2" size="xl" mb={10} textAlign="center">
-              Why Subscribe to Our Newsletter?
-            </Heading>
-            
-            <Stack 
-              direction={{ base: "column", md: "row" }}
-              spacing={8}
+          {/* Terms Text */}
+          <Text fontSize="xs" color="gray.500" textAlign="center" mt={2} maxW="600px">
+            By subscribing, I agree to Terms of Use and acknowledge its Information Collection Notice and Privacy Policy
+          </Text>
+          
+          {/* No Thanks Button */}
+          <Box textAlign="center" mt={4}>
+            <Button
+              variant="link"
+              color="gray.400"
+              fontSize="sm"
+              rightIcon={<Box as="span" ml={1}>›</Box>}
             >
-              {[
-                {
-                  title: "Exclusive Content",
-                  description: "Get access to articles and insights not published anywhere else."
-                },
-                {
-                  title: "Stay Updated",
-                  description: "Never miss important news and updates in your industry."
-                },
-                {
-                  title: "Expert Analysis",
-                  description: "Benefit from in-depth analysis by industry experts."
-                }
-              ].map((item, index) => (
-                <Box 
-                  key={index} 
-                  p={6} 
-                  borderRadius="lg" 
-                  boxShadow="md" 
-                  bg="white"
-                  flex={1}
-                >
-                  <Heading as="h3" size="md" mb={4}>
-                    {item.title}
-                  </Heading>
-                  <Text color="gray.600">
-                    {item.description}
-                  </Text>
-                </Box>
-              ))}
-            </Stack>
+              No thanks
+            </Button>
           </Box>
-
-          {/* Recent Issues Preview Section */}
-          <Box py={12} bg="gray.50" borderRadius="lg" p={8}>
-            <Heading as="h2" size="xl" mb={10} textAlign="center">
-              Recent Newsletter Issues
-            </Heading>
-            
-            <Stack spacing={8}>
-              {[
-                {
-                  title: "The Future of AI in Business",
-                  date: "March 25, 2025",
-                  excerpt: "Exploring how artificial intelligence is transforming business operations and strategies..."
-                },
-                {
-                  title: "Sustainable Business Practices",
-                  date: "March 18, 2025",
-                  excerpt: "How companies are implementing eco-friendly initiatives while improving their bottom line..."
-                },
-                {
-                  title: "Remote Work Revolution",
-                  date: "March 11, 2025",
-                  excerpt: "The lasting impact of remote work on productivity, culture, and the future workplace..."
-                }
-              ].map((issue, index) => (
-                <Box 
-                  key={index} 
-                  p={6} 
-                  borderRadius="md" 
-                  boxShadow="sm" 
-                  bg="white"
-                >
-                  <Text fontWeight="bold" color="gray.500" mb={1}>
-                    {issue.date}
-                  </Text>
-                  <Heading as="h3" size="md" mb={2}>
-                    {issue.title}
-                  </Heading>
-                  <Text color="gray.600">
-                    {issue.excerpt}
-                  </Text>
-                  <Button mt={4} variant="ghost" colorScheme="blue">
-                    Read Sample
-                  </Button>
-                </Box>
-              ))}
-            </Stack>
-          </Box>
-        </Stack>
+        </Flex>
       </Container>
-    </Layout>
+    </Box>
   );
 }

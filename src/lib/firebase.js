@@ -5,6 +5,7 @@ import {
   collection, 
   addDoc, 
   getDocs, 
+  getDoc,  // Add this import
   doc, 
   updateDoc, 
   deleteDoc,
@@ -189,6 +190,32 @@ export const getNewsletters = async (limit = null) => {
   }
 };
 
+// Add this function to get a single newsletter by ID
+export const getNewsletterById = async (id) => {
+  try {
+    if (!id || typeof id !== 'string') {
+      console.error('Invalid newsletter ID provided:', id);
+      return null;
+    }
+    
+    const docRef = doc(db, 'newsletters', id);
+    const docSnap = await getDoc(docRef);
+    
+    if (docSnap.exists()) {
+      return {
+        id: docSnap.id,
+        ...docSnap.data()
+      };
+    } else {
+      console.log('No newsletter found with ID:', id);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error getting newsletter:', error);
+    throw error;
+  }
+};
+
 export const updateNewsletter = async (id, data) => {
   try {
     if (!id || typeof id !== 'string') {
@@ -218,6 +245,93 @@ export const deleteNewsletter = async (id) => {
   } catch (error) {
     console.error('Error deleting newsletter:', error);
     return { success: false, error };
+  }
+};
+
+// Add this function to send newsletters
+export const sendNewsletter = async (id) => {
+  try {
+    if (!id || typeof id !== 'string') {
+      console.error('Invalid newsletter ID provided:', id);
+      return { success: false, error: 'Invalid newsletter ID' };
+    }
+    
+    // Get the newsletter
+    const newsletterRef = doc(db, 'newsletters', id);
+    const newsletterSnap = await getDoc(newsletterRef);
+    
+    if (!newsletterSnap.exists()) {
+      return { success: false, error: 'Newsletter not found' };
+    }
+    
+    const newsletter = {
+      id: newsletterSnap.id,
+      ...newsletterSnap.data()
+    };
+    
+    // Check if already sent
+    if (newsletter.sent) {
+      return { success: false, error: 'Newsletter already sent' };
+    }
+    
+    // Get subscribers based on target audience
+    let subscribers;
+    try {
+      if (newsletter.targetAudience === 'all') {
+        subscribers = await getSubscribers('active');
+      } else if (newsletter.targetAudience === 'test') {
+        // For test, just use the first subscriber or a test email
+        const allSubscribers = await getSubscribers('active');
+        subscribers = allSubscribers.slice(0, 1);
+      } else {
+        // This would need more complex logic based on your segmentation
+        subscribers = await getSubscribers('active');
+      }
+    } catch (error) {
+      console.error('Error fetching subscribers:', error);
+      return { success: false, error: 'Failed to fetch subscribers' };
+    }
+    
+    if (subscribers.length === 0) {
+      return { success: false, error: 'No subscribers found to send newsletter to' };
+    }
+    
+    // Import the sendEmail function
+    const { sendEmail } = await import('../lib/emailjs');
+    
+    // Send to each subscriber
+    let sentCount = 0;
+    for (const subscriber of subscribers) {
+      try {
+        // Properly format the parameters for EmailJS
+        const emailResult = await sendEmail({
+          to_email: subscriber.email,
+          to_name: subscriber.name || 'Subscriber',
+          subject: newsletter.subject,
+          message_html: newsletter.content,
+          email_title: newsletter.title,
+          date: new Date().toLocaleDateString()
+        }, process.env.NEXT_PUBLIC_EMAILJS_NEWSLETTER_TEMPLATE_ID);
+        
+        if (emailResult.success) {
+          sentCount++;
+        }
+      } catch (error) {
+        console.error(`Error sending to ${subscriber.email}:`, error);
+      }
+    }
+    
+    // Update the newsletter as sent
+    await updateDoc(newsletterRef, { 
+      sent: true, 
+      sentAt: new Date().toISOString(),
+      sentCount
+    });
+    
+    return { success: true, sentCount };
+  } catch (error) {
+    console.error('Error sending newsletter:', error);
+    return { success: false, error: error.message };
   }
 };
 

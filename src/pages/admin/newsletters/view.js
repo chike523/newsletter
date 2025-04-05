@@ -22,9 +22,9 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { FiArrowLeft, FiEdit, FiTrash2 } from 'react-icons/fi';
-import Layout from '../../../../components/layout/Layout';
+import Layout from '@/components/layout/Layout';
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../../../../lib/firebase';
+import { db } from '@/lib/firebase';
 
 export default function ViewNewsletter() {
   const [isClient, setIsClient] = useState(false);

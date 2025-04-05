@@ -25,11 +25,11 @@ import {
   AlertIcon,
   Spinner,
 } from '@chakra-ui/react';
-import Layout from '../../../../components/layout/Layout';
+import Layout from '@/components/layout/Layout';
 import { useRouter } from 'next/router';
 import { FiArrowLeft, FiSave } from 'react-icons/fi';
 import { doc, getDoc } from 'firebase/firestore';
-import { db, updateNewsletter } from '../../../../lib/firebase';
+import { db, updateNewsletter } from '@/lib/firebase';
 
 export default function EditNewsletter() {
   const [isClient, setIsClient] = useState(false);
